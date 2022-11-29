@@ -1,12 +1,9 @@
 import { Router, Request, Response } from 'express';
+import * as balanceController from '../controllers/balance';
 
 const router = Router();
 
 // define todo endpoints
-router.post('/deposit/:userId', todoFunction);
-
-async function todoFunction(req: Request, res: Response) {
-    res.send('Hello World!');
-}
+router.post('/deposit/:userId', balanceController.depositTo);
 
 export default router;

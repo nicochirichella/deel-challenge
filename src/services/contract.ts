@@ -20,7 +20,10 @@ export const getContracts = async (profileId: number) => {
             [Op.or]: [
                 {ClientId: profileId},
                 {ContractorId: profileId}
-            ]
+            ],
+            status: {
+                [Op.not]: 'terminated'
+            }
         }
     })
     return contracts
@@ -35,6 +38,16 @@ export const getActiveContracts = async (profileId: number) => {
                 {ClientId: profileId},
                 {ContractorId: profileId}
             ]
+        }
+    });
+    return contracts
+}
+
+export const getActiveContractsForClient = async (profileId: number) => {
+    const contracts = await Contract.findAll({
+        where: {
+            status: 'in_progress',
+            ClientId: profileId
         }
     });
     return contracts
