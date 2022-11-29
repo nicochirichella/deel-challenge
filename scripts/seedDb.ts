@@ -1,9 +1,10 @@
-const { Profile, Contract, Job } = require('../src/model');
-// import Profile from '../src/models/Profile';
-// import Contract from '../src/models/Contract';
-// import Job from '../src/models/Job';
+import Profile from '../src/db/models/Profile';
+import Contract from '../src/db/models/Contract';
+import Job from '../src/db/models/Job';
+import { associate } from "../src/db/models";
 
 /* WARNING THIS WILL DROP THE CURRENT DATABASE */
+associate();
 seed();
 
 async function seed() {
