@@ -1,5 +1,7 @@
 import { Op } from 'sequelize';
+import sequelize from '../db/dbSetup';
 import Job from '../db/models/Job';
+import Profile from '../db/models/Profile';
 import * as ContractService from './contract';
 
 export const getUnpaidJobs = async (profileId: number) => {
@@ -16,25 +18,52 @@ export const getUnpaidJobs = async (profileId: number) => {
     return jobs
 }
 
-export const getJobById = async (jobId: number) => {
+export const getJobById = async (jobId: number, options: any = {}) => {
     const job = await Job.findOne({
         where: {
             id: jobId
-        }
+        },
+        ...options
     })
     return job
 }
 
 export const payJob = async (jobId: number, profileId: number) => {
-    const job = await getJobById(jobId);
+    const t = await sequelize.transaction();
+    const options = { transaction: t, lock: t.LOCK.UPDATE };
+
+    const job = await getJobById(jobId, options);
     if(!job) return false;
 
     const contract = await ContractService.getContractById(job.ContractId, profileId);
     if(!contract) return false;
 
-    job.paid = true;
-    job.paymentDate = new Date();
-    await job.save();
+    try {
+        const client = await Profile.findByPk(contract.ClientId, options);
+        const contractor = await Profile.findByPk(contract.ContractorId, options);
 
-    return true;
+        if (!client || !contractor || client.balance < job.price) {
+            await t.rollback();
+            return false;
+        }        
+
+        await job.update({
+            paid: true,
+            paymentDate: new Date()
+        }, {transaction: t});
+
+        await client.update({
+            balance: client.balance - job.price
+        }, {transaction: t});
+
+        await contractor.update({
+            balance: contractor.balance + job.price
+        }, {transaction: t});
+
+        await t.commit();
+        return true;
+    } catch (error) {
+        await t.rollback();
+        return false;
+    }
 }
