@@ -18,7 +18,10 @@ export const getUnpaidJobs = async (profileId: number) => {
   return jobs;
 };
 
-export const getJobById = async (jobId: number, options: any = {}): Promise<Job|null>=> {
+export const getJobById = async (
+  jobId: number,
+  options: any = {}
+): Promise<Job | null> => {
   const job = await Job.findOne({
     where: {
       id: jobId,
