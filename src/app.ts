@@ -10,6 +10,7 @@ import { associate } from "./db/models";
 import contracts from "./routes/contracts";
 import jobs from "./routes/jobs";
 import balances from "./routes/balances";
+import admin from "./routes/admin";
 
 const app = express();
 associate();
@@ -25,5 +26,6 @@ app.set('models', sequelize.models)
 app.use('/contracts', getProfile, contracts);
 app.use('/jobs', getProfile, jobs);
 app.use('/balances', getProfile, balances);
+app.use('/admin', admin);
 
 export default app;

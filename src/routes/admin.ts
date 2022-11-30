@@ -1,13 +1,10 @@
 import { Router, Request, Response } from 'express';
+import * as adminController from '../controllers/admin';
 
 const router = Router();
 
 // define todo endpoints
-router.get('/best-profession', todoFunction); // ?start=<date>&end=<date>
-router.get('/admin/best-clients', todoFunction); // ?start=<date>&end=<date>&limit=<integer>
-
-async function todoFunction(req: Request, res: Response) {
-    res.send('Hello World!');
-}
+router.get('/best-profession', adminController.getBestProfession); // ?start=<date>&end=<date>
+router.get('/best-clients', adminController.getClientsThayPaidMost); // ?start=<date>&end=<date>&limit=<integer>
 
 export default router;
