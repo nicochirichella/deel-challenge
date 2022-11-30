@@ -20,12 +20,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.set('sequelize', sequelize)
-app.set('models', sequelize.models)
+app.set("sequelize", sequelize);
+app.set("models", sequelize.models);
 
-app.use('/contracts', getProfile, contracts);
-app.use('/jobs', getProfile, jobs);
-app.use('/balances', getProfile, balances);
-app.use('/admin', admin);
+app.use("/contracts", getProfile, contracts);
+app.use("/jobs", getProfile, jobs);
+app.use("/balances", getProfile, balances);
+app.use("/admin", admin);
 
 export default app;

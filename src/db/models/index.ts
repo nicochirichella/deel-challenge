@@ -3,17 +3,17 @@ import Contract from "./Contract";
 import Job from "./Job";
 
 const models = {
-    Profile,
-    Contract,
-    Job
+  Profile,
+  Contract,
+  Job,
 };
 
 const associate = () => {
-    Object.values(models).forEach((model: any) => {
-        if (model.associate) {
-            model.associate(models);
-        }
-    });
+  Object.values(models).forEach((model: any) => {
+    if (model.associate) {
+      model.associate(models);
+    }
+  });
 };
 
 export { associate, models };
