@@ -1,10 +1,9 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { getProfile } from "./middleware/getProfile";
 import sequelize from "./db/dbSetup";
 import { associate } from "./db/models";
-// import config from "./config";
 
 // routes
 import contracts from "./routes/contracts";

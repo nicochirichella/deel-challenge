@@ -3,6 +3,7 @@ import sequelize from "../db/dbSetup";
 import * as ContractService from "./contract";
 import Job from "../db/models/Job";
 import Profile from "../db/models/Profile";
+import logger from "../logger";
 
 export const getClientDebt = async (profileId: number) => {
   const contracts = await ContractService.getActiveContractsForClient(
@@ -22,6 +23,7 @@ export const getClientDebt = async (profileId: number) => {
 };
 
 function validateDepositLimit(deposit: number, debt: number) {
+  logger.info(`Validating deposit limit: ${deposit} against debt: ${debt}`);
   const depositLimit = 0.25 * debt;
   if (deposit > depositLimit) {
     throw new Error(`Deposit limit exceeded. Max deposit is ${depositLimit}`);
@@ -34,9 +36,7 @@ export const updateBalance = async (
   amount: number
 ) => {
   if (depositorProfile.type === "client") {
-    console.log("client deposit");
     const debt = await getClientDebt(depositorProfile.id);
-    console.log("the debt is ", debt);
     validateDepositLimit(amount, debt);
   }
 
@@ -57,7 +57,7 @@ export const updateBalance = async (
     await t.commit();
     return updatedProfile.balance;
   } catch (error) {
-    console.log("unlocking db for error: ", error);
+    logger.info("Error in updateBalance", error);
     await t.rollback();
     throw error;
   }

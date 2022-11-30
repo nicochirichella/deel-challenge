@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as adminService from "../services/admin";
+import logger from "../logger";
 
 export const getClientsThayPaidMost = async (req: Request, res: Response) => {
   try {
@@ -14,7 +15,7 @@ export const getClientsThayPaidMost = async (req: Request, res: Response) => {
 
     res.json(clients);
   } catch (err) {
-    console.log(err);
+    logger.error(`Error in getClientsThayPaidMost: ${err}`);
     res.status(500).json(err);
   }
 };
@@ -27,7 +28,7 @@ export const getBestProfession = async (req: Request, res: Response) => {
 
     res.json(profession);
   } catch (err) {
-    console.log(err);
+    logger.error(`Error in getBestProfession: ${err}`);
     res.status(500).json(err);
   }
 };
